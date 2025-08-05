@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Historie a zajímavosti o M&A konzultingu</title>
+  <!--
+    Tento soubor představuje vylepšenou verzi interaktivní stránky o M&A
+    konzultingu. Oproti původnímu provedení má modernější vzhled,
+    barevnější rozvržení a více interaktivních prvků. Uživatelé mohou
+    procházet historii fúzí a akvizic skrze klikací časovou osu,
+    rozbalovat přehled úloh M&A konzultantů, prohlížet si zajímavosti
+    prostřednictvím otočných karet a interaktivně přepínat mezi různými
+    typy grafů. Sekce s významnými firmami nyní umožňuje vyhledávání.
+  -->
+  <style>
+    /* Definice barevné palety */
+    :root {
+      --primary: #1a73e8;        /* modrá pro hlavní akcenty */
+      --secondary: #f1f9fe;      /* velmi světlá modrá pro podklad */
+      --accent: #fbbc05;         /* žlutá pro zvýraznění bodů na časové ose */
+      --success: #34a853;        /* zelená pro gradient v hlavičce */
+      --text-dark: #202124;      /* tmavá barva textu */
+      --text-light: #5f6368;     /* světlejší text pro méně důležité informace */
+      --card-bg: #ffffff;        /* barva pozadí karet */
+      --card-shadow: 0 2px 8px rgba(0,0,0,0.1); /* stín karet */
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--secondary);
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    /* Hlavička stránky s gradientem */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--success));
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    header p {
+      margin-top: 10px;
+      font-size: 18px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Navigace s odkazy na jednotlivé sekce */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Obecné rozvržení sekcí */
+    section {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Časová osa */
+    .timeline-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .timeline {
+      position: relative;
+      width: 250px;
+      min-height: 400px;
+    }
+
+    /* Vertikální čára označující osu */
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--primary);
+    }
+
+    /* Jednotlivé události na časové ose */
+    .timeline-event {
+      position: relative;
+      padding: 10px 0 10px 50px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .timeline-event .dot {
+      position: absolute;
+      left: 11px;
+      top: 15px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 4px solid var(--primary);
+    }
+
+    .timeline-event.active .dot {
+      background: var(--primary);
+    }
+
+    .timeline-event span.date {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Panel s podrobnostmi k události */
+    .timeline-details {
+      flex: 1;
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+      min-width: 200px;
+    }
+
+    .timeline-details h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    /* Akordeon pro úlohy konzultantů */
+    .accordion {
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .accordion-item {
+      border-bottom: 1px solid var(--primary);
+    }
+
+    .accordion-item:last-child {
+      border-bottom: none;
+    }
+
+    .accordion-header {
+      background: var(--primary);
+      color: white;
+      padding: 15px 20px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* Symbol plus/kríž pro zobrazení a skrytí obsahu */
+    .accordion-header::after {
+      content: "+";
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.3s;
+      font-weight: bold;
+    }
+
+    .accordion-header.active::after {
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 15px 20px;
+      background: var(--secondary);
+      color: var(--text-dark);
+    }
+
+    /* Karty pro zajímavosti a statistiky */
+    .facts-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .fact-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      width: calc(50% - 20px);
+      perspective: 1000px;
+      cursor: pointer;
+      position: relative;
+      min-height: 150px;
+    }
+
+    .fact-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .fact-card.flipped .fact-inner {
+      transform: rotateY(180deg);
+    }
+
+    .fact-front, .fact-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .fact-front {
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fact-back {
+      background: var(--secondary);
+      transform: rotateY(180deg);
+    }
+
+    .fact-front h3 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .fact-back p {
+      margin-top: 0;
+      font-size: 14px;
+    }
+
+    /* Ovládací prvky a plátno pro grafy */
+    .chart-controls {
+      margin-bottom: 10px;
+    }
+
+    .chart-controls label {
+      margin-right: 15px;
+      font-weight: 600;
+    }
+
+    /* Vyhledávání a seznam firem */
+    .search-bar {
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid var(--primary);
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .firm-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .firm-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      width: calc(33.333% - 20px);
+      padding: 20px;
+      box-sizing: border-box;
+      transition: transform 0.2s;
+    }
+
+    .firm-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .firm-card h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 20px;
+    }
+
+    .firm-card p {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    /* Zdroje a poznámky pod čarou */
+    .footnotes {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 40px;
+    }
+
+    .footnotes ol {
+      padding-left: 20px;
+    }
+
+    .footnotes li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Historie a zajímavosti o M&A konzultingu</h1>
+    <p>Prozkoumejte časovou osu hlavních fúzí, úlohu poradců, zajímavé statistiky a seznam významných poradenských firem.</p>
+    <nav>
+      <a href="#history">Historie</a>
+      <a href="#roles">Úloha konzultantů</a>
+      <a href="#facts">Zajímavosti</a>
+      <a href="#charts">Grafy</a>
+      <a href="#firms">Firmy</a>
+    </nav>
+  </header>
+  <main>
+    <!-- Sekce historie s vertikální časovou osou -->
+    <section id="history">
+      <h2>Historie M&A</h2>
+      <div class="timeline-container">
+        <div class="timeline" id="timeline-events">
+          <!-- Události časové osy budou vloženy skriptem -->
+        </div>
+        <div class="timeline-details">
+          <h3 id="timeline-title"></h3>
+          <p id="timeline-description"></p>
+        </div>
+      </div>
+    </section>
+    <!-- Sekce s úlohami M&A konzultantů -->
+    <section id="roles">
+      <h2>Úloha M&A konzultantů</h2>
+      <div class="accordion" id="roles-accordion">
+        <!-- Akordeonové položky budou vloženy skriptem -->
+      </div>
+    </section>
+    <!-- Sekce se zajímavostmi a statistikami -->
+    <section id="facts">
+      <h2>Zajímavosti a statistiky</h2>
+      <div class="facts-container" id="facts-container">
+        <!-- Karty budou vloženy skriptem -->
+      </div>
+    </section>
+    <!-- Sekce s interaktivními grafy -->
+    <section id="charts">
+      <h2>Interaktivní grafy</h2>
+      <div class="chart-controls">
+        <label><input type="radio" name="chartType" value="bar" checked> Sloupcový graf</label>
+        <label><input type="radio" name="chartType" value="pie"> Koláčový graf</label>
+        <label><input type="radio" name="chartType" value="line"> Liniový graf</label>
+      </div>
+      <div>
+        <canvas id="chartCanvas"></canvas>
+      </div>
+    </section>
+    <!-- Sekce s významnými poradenskými firmami -->
+    <section id="firms">
+      <h2>Významné poradenské firmy</h2>
+      <div class="search-bar">
+        <input type="text" id="firmSearch" placeholder="Hledat firmu...">
+      </div>
+      <div class="firm-list" id="firm-list">
+        <!-- Karty firem budou vloženy skriptem -->
+      </div>
+    </section>
+    <!-- Sekce pro zdroje -->
+    <section id="references">
+      <h2>Zdroje</h2>
+      <div class="footnotes">
+        <ol>
+          <!-- Poznámky pod čarou budou vloženy skriptem -->
+        </ol>
+      </div>
+    </section>
+  </main>
+  <!-- Načtení knihovny Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Pole definující události časové osy
+    const timelineEvents = [
+      {
+        date: '1708–1821',
+        title: 'Před 19. stoletím – rané fúze',
+        description: 'Ještě před průmyslovou revolucí docházelo k významným fúzím. V roce 1708 se Východoindická společnost spojila s konkurencí, aby obnovila monopol na indický obchod; v roce 1784 byly sloučeny italské banky Monte dei Paschi a Monte Pio do banky Monti Reuniti; v roce 1821 se Hudson’s Bay Company spojila se svým rivalem North West Company【1178589335265646†L1137-L1143】.'
+      },
+      {
+        date: '1895–1905',
+        title: 'Great Merger Movement',
+        description: 'Na přelomu 19. a 20. století došlo k tzv. Great Merger Movement. Mezi lety 1895–1905 se v USA více než 1 800 firem sloučilo; hodnota těchto transakcí v roce 1900 představovala 20 % amerického HDP【1178589335265646†L1155-L1164】.'
+      },
+      {
+        date: '1893–1904',
+        title: 'První vlna: horizontální fúze',
+        description: 'První vlna (1893–1904) se vyznačovala převážně horizontálními fúzemi, kdy se spojovaly firmy ze stejného odvětví a snažily se získat monopolní postavení【1178589335265646†L1261-L1270】.'
+      },
+      {
+        date: '1919–1929',
+        title: 'Druhá vlna: vertikální fúze',
+        description: 'Druhá vlna M&A (1919–1929) byla charakteristická vertikálními fúzemi – integrací dodavatelského řetězce – a vznikem oligopolů【1178589335265646†L1261-L1270】.'
+      },
+      {
+        date: '1955–1970',
+        title: 'Třetí vlna: konglomeráty',
+        description: 'Třetí vlna (1955–1970) přinesla konglomerátní fúze, kdy firmy vstupovaly do nesouvisejících odvětví, aby diverzifikovaly riziko【1178589335265646†L1261-L1270】.'
+      },
+      {
+        date: '1974–1989',
+        title: 'Čtvrtá vlna: corporate raiding',
+        description: 'Během čtvrté vlny (1974–1989) se objevily nepřátelské převzetí a corporate raiding; spekulanti využívali finančních inovací ke koupi podhodnocených společností【1178589335265646†L1261-L1270】.'
+      },
+      {
+        date: '1993–2008',
+        title: 'Pátá vlna: přeshraniční mega-fúze',
+        description: 'Pátá vlna (1993–2008) byla ve znamení přeshraničních mega-fúzí; globalizace a deregulace umožnily firmám expandovat do zahraničí【1178589335265646†L1261-L1270】.'
+      },
+      {
+        date: '2000s–2010s',
+        title: 'Šestá vlna: globalizace a private equity',
+        description: 'Šestá vlna (po roce 2003) byla poháněna globalizací, finančními inovacemi a rostoucí úlohou private equity investorů【1178589335265646†L1261-L1270】.'
+      },
+      {
+        date: '2014–současnost',
+        title: 'Sedmá vlna: vyvážené transakce',
+        description: 'Sedmá vlna (po roce 2014) se vyznačuje vyváženými transakcemi, které kombinují horizontální, vertikální i konglomerátní prvky【1178589335265646†L1261-L1270】.'
+      }
+    ];
+
+    // Definice úloh M&A konzultantů
+    const roles = [
+      {
+        title: 'Strategické plánování a analýza trhu',
+        content: 'M&A poradci pomáhají vymezit strategii, identifikovat růstové příležitosti a zhodnotit vhodnost fúze nebo akvizice【697512253553183†L123-L156】.'
+      },
+      {
+        title: 'Valuace a finanční analýza',
+        content: 'Provádějí ocenění cílové společnosti, modelují synergii a analyzují finanční ukazatele, aby stanovili férovou hodnotu【697512253553183†L123-L156】.'
+      },
+      {
+        title: 'Strukturování obchodu',
+        content: 'Navrhují optimální strukturu transakce (např. nákup aktiv vs. nákup akcií) a řeší daňové či regulační otázky【697512253553183†L123-L156】.'
+      },
+      {
+        title: 'Due diligence',
+        content: 'Zajišťují důkladnou prověrku finanční, právní, provozní a technologické situace cíle, aby odhalili rizika【697512253553183†L123-L156】.'
+      },
+      {
+        title: 'Vyjednávání',
+        content: 'Působí jako prostředník, zastupují zájmy klienta a vyjednávají podmínky transakce včetně ceny a smluvních klauzulí【697512253553183†L123-L156】.'
+      },
+      {
+        title: 'Financování',
+        content: 'Radí ohledně možností financování transakce; mohou strukturovat dluhové i akciové financování a navrhnout optimální kapitálovou strukturu【697512253553183†L123-L156】.'
+      },
+      {
+        title: 'Právní soulad',
+        content: 'Zajišťují, aby transakce splňovala všechny právní a regulační požadavky, včetně antimonopolních pravidel a legislativy o cenných papírech【697512253553183†L123-L156】.'
+      },
+      {
+        title: 'Integrace',
+        content: 'Pomáhají při plánování a realizaci post-merger integrace, aby se dosáhlo očekávané synergie a minimalizovalo narušení provozu【697512253553183†L123-L156】.'
+      }
+    ];
+
+    // Zajímavosti a statistiky v podobě otočných karet
+    const facts = [
+      {
+        front: 'Technologické poradenství tvoří 30 % M&A transakcí',
+        back: 'IT a technologické poradenství je nejaktivnější segment M&A trhu; marketingové poradenství je druhé a HR poradenství představuje pouze 10 % transakcí【197025618244889†L180-L198】.'
+      },
+      {
+        front: 'Big Four uzavřely 185 transakcí (2010–2014)',
+        back: 'Deloitte, EY, KPMG a PwC uzavřely mezi lety 2010–2014 celkem 185 transakcí – Deloitte 57, PwC 44, KPMG 43 a EY 41【197025618244889†L204-L207】.'
+      },
+      {
+        front: 'Regionální rozložení transakcí',
+        back: 'Téměř polovina konzultačních M&A transakcí se odehrává v Severní Americe; Evropa je na druhém místě, přičemž největší podíl evropských transakcí připadá na Spojené království【197025618244889†L218-L231】.'
+      },
+      {
+        front: 'Rostoucí role private equity',
+        back: 'Podíl transakcí financovaných private equity a venture kapitálem nad 20 milionů USD vzrostl v roce 2014 na 15 %, což je téměř dvojnásobek oproti roku 2008【197025618244889†L211-L216】.'
+      },
+      {
+        front: 'Přeshraniční transakce',
+        back: 'Do roku 2018 bylo uskutečněno 280 472 přeshraničních fúzí a akvizic v hodnotě 24 069 miliard USD; v roce 1997 se uskutečnilo 2 333 přeshraničních transakcí v souhrnné hodnotě 298 miliard USD【1178589335265646†L1351-L1361】.'
+      },
+      {
+        front: 'Největší M&A obchod v historii',
+        back: 'Vodafone AirTouch v roce 2000 koupil německý Mannesmann za přibližně 180,95 miliard USD, což je dosud největší M&A transakce【613661016878054†L386-L390】.'
+      },
+      {
+        front: 'Definice synergie',
+        back: 'Hodnota vytvořená spojením dvou společností se nazývá synergie; jde o dodatečnou hodnotu, kterou samostatně společnosti nemohou dosáhnout【613661016878054†L241-L266】.'
+      }
+    ];
+
+    // Seznam významných poradenských firem
+    const firms = [
+      {
+        name: 'Deloitte',
+        description: 'Jedna z největších poradenských sítí na světě poskytující audit, daňové, právní a poradenské služby včetně M&A.'
+      },
+      {
+        name: 'PwC',
+        description: 'PwC patří mezi „Velkou čtyřku“ a nabízí služby v oblasti auditu, daní a poradenství, včetně fúzí a akvizic.'
+      },
+      {
+        name: 'KPMG',
+        description: 'KPMG poskytuje auditní, daňové a poradenské služby. V M&A pomáhá s due diligence, valuací a integrací.'
+      },
+      {
+        name: 'EY (Ernst & Young)',
+        description: 'EY nabízí poradenské služby v oblasti transakcí, financování a integrace s globálním dosahem.'
+      },
+      {
+        name: 'Kearney',
+        description: 'Kearney je strategická poradenská firma s důrazem na operace, M&A a digitalizaci.'
+      },
+      {
+        name: 'Bain & Company',
+        description: 'Bain poskytuje strategické poradenství včetně M&A, pomáhá klientům identifikovat cíle a dosáhnout synergií.'
+      },
+      {
+        name: 'Boston Consulting Group (BCG)',
+        description: 'BCG je globální konzultační firma zaměřená na strategii a digitální transformaci, v M&A radí ohledně růstu a inovací.'
+      },
+      {
+        name: 'McKinsey & Company',
+        description: 'McKinsey je přední strategická konzultační firma, která poskytuje komplexní služby M&A od due diligence po integraci.'
+      },
+      {
+        name: 'L.E.K. Consulting',
+        description: 'L.E.K. je mezinárodní poradenská firma specializující se na strategie, fúze a akvizice a private equity【613661016878054†L355-L370】.'
+      }
+    ];
+
+    // Poznámky pod čarou s odkazy na zdroje
+    const footnotes = [
+      'Raně historické fúze: East India Company (1708), Monti Reuniti (1784), Hudson’s Bay Company (1821)【1178589335265646†L1137-L1143】.',
+      'Great Merger Movement a horizontální fúze (1895–1905) – více než 1 800 firem se sloučilo, hodnota fúzí dosáhla 20 % amerického HDP【1178589335265646†L1155-L1164】.',
+      'Přehled M&A vln: horizontální (1893–1904), vertikální (1919–1929), konglomerátní (1955–1970), nepřátelská a corporate raiding (1974–1989), přeshraniční (1993–2008), globalizační a private equity (2000s–2010s), vyvážená a horizontální (po 2014)【1178589335265646†L1261-L1270】.',
+      'Synergie – přidaná hodnota vytvořená spojením podniků【613661016878054†L241-L266】.',
+      'Hlavní činnosti M&A poradců: strategické plánování, analýza trhu, valuace, strukturování, prověrka, vyjednávání, financování, právní soulad a integrace【697512253553183†L123-L156】.',
+      'IT poradenství tvoří 30 % transakcí, marketing je druhým nejaktivnějším segmentem, HR je jen 10 %【197025618244889†L180-L198】.',
+      'Velká čtyřka (Deloitte, EY, KPMG a PwC) uzavřela 185 transakcí (2010–2014) – Deloitte 57, PwC 44, KPMG 43 a EY 41【197025618244889†L204-L207】.',
+      'Regionální rozložení: téměř polovina transakcí v Severní Americe; Evropa je druhá, největší podíl přichází z Velké Británie【197025618244889†L218-L231】.',
+      'Podíl private equity a venture kapitálu roste: v roce 2014 15 % transakcí nad 20 milionů USD financováno private equity, dvojnásobek oproti roku 2008【197025618244889†L211-L216】.',
+      'Přeshraniční M&A: 280 472 transakcí v hodnotě 24 069 miliard USD do roku 2018; v roce 1997 2 333 transakcí v hodnotě 298 miliard USD【1178589335265646†L1351-L1361】.',
+      'Největší M&A transakce v historii: Vodafone AirTouch koupil Mannesmann za 180,95 miliard USD【613661016878054†L386-L390】.',
+      'Seznam významných poradenských firem: Kearney, Bain & Company, Boston Consulting Group, McKinsey & Company, L.E.K. Consulting【613661016878054†L355-L370】.'
+    ];
+
+    // Inicializace a naplnění časové osy
+    const timelineContainer = document.getElementById('timeline-events');
+    const timelineTitle = document.getElementById('timeline-title');
+    const timelineDesc = document.getElementById('timeline-description');
+
+    timelineEvents.forEach((event, index) => {
+      const div = document.createElement('div');
+      div.classList.add('timeline-event');
+      if (index === 0) div.classList.add('active');
+      div.dataset.index = index;
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      const date = document.createElement('span');
+      date.classList.add('date');
+      date.textContent = event.date;
+      div.appendChild(dot);
+      div.appendChild(date);
+      div.addEventListener('click', () => {
+        document.querySelectorAll('.timeline-event').forEach(ev => ev.classList.remove('active'));
+        div.classList.add('active');
+        timelineTitle.textContent = event.title;
+        timelineDesc.textContent = event.description;
+      });
+      timelineContainer.appendChild(div);
+    });
+
+    // Nastavení výchozí události
+    timelineTitle.textContent = timelineEvents[0].title;
+    timelineDesc.textContent = timelineEvents[0].description;
+
+    // Naplnění akordeonu pro úlohy
+    const rolesContainer = document.getElementById('roles-accordion');
+    roles.forEach((role) => {
+      const item = document.createElement('div');
+      item.classList.add('accordion-item');
+      const header = document.createElement('div');
+      header.classList.add('accordion-header');
+      header.textContent = role.title;
+      const content = document.createElement('div');
+      content.classList.add('accordion-content');
+      content.textContent = role.content;
+      header.addEventListener('click', () => {
+        const expanded = header.classList.contains('active');
+        document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+        document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
+        if (!expanded) {
+          header.classList.add('active');
+          content.style.display = 'block';
+        }
+      });
+      item.appendChild(header);
+      item.appendChild(content);
+      rolesContainer.appendChild(item);
+    });
+
+    // Naplnění karet se zajímavostmi
+    const factsContainerElem = document.getElementById('facts-container');
+    facts.forEach(fact => {
+      const card = document.createElement('div');
+      card.classList.add('fact-card');
+      const inner = document.createElement('div');
+      inner.classList.add('fact-inner');
+      const front = document.createElement('div');
+      front.classList.add('fact-front');
+      const frontTitle = document.createElement('h3');
+      frontTitle.textContent = fact.front;
+      front.appendChild(frontTitle);
+      const back = document.createElement('div');
+      back.classList.add('fact-back');
+      const backText = document.createElement('p');
+      backText.textContent = fact.back;
+      back.appendChild(backText);
+      inner.appendChild(front);
+      inner.appendChild(back);
+      card.appendChild(inner);
+      card.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+      });
+      factsContainerElem.appendChild(card);
+    });
+
+    // Funkce pro vykreslení grafů pomocí Chart.js
+    const chartCtx = document.getElementById('chartCanvas').getContext('2d');
+    const chartData = {
+      labels: ['IT/Technologie', 'Marketing', 'HR', 'Ostatní'],
+      datasets: [{
+        label: 'Podíl segmentů (%)',
+        data: [30, 20, 10, 40],
+        backgroundColor: ['#1a73e8', '#34a853', '#fbbc05', '#e8713b']
+      }]
+    };
+    let currentChart;
+    function renderChart(type) {
+      if (currentChart) currentChart.destroy();
+      const options = {
+        responsive: true,
+        plugins: {
+          legend: { display: true, position: 'bottom' },
+          title: { display: false }
+        }
+      };
+      if (type === 'line') {
+        currentChart = new Chart(chartCtx, {
+          type: 'line',
+          data: {
+            labels: ['2010', '2012', '2014', '2016', '2018', '2020', '2022'],
+            datasets: [{
+              label: 'Počet M&A poradenství (model)',
+              data: [50, 70, 90, 120, 110, 130, 160],
+              borderColor: '#1a73e8',
+              backgroundColor: 'rgba(26,115,232,0.2)',
+              fill: true,
+              tension: 0.3
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: true, position: 'bottom' },
+              title: { display: false }
+            },
+            scales: {
+              x: { title: { display: true, text: 'Rok' } },
+              y: { title: { display: true, text: 'Počet transakcí' } }
+            }
+          }
+        });
+      } else {
+        currentChart = new Chart(chartCtx, {
+          type: type,
+          data: chartData,
+          options: options
+        });
+      }
+    }
+    // Inicializace výchozího typu grafu
+    renderChart('bar');
+    document.querySelectorAll('input[name="chartType"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        renderChart(e.target.value);
+      });
+    });
+
+    // Funkce pro zobrazení seznamu firem
+    const firmListElem = document.getElementById('firm-list');
+    function displayFirms(list) {
+      firmListElem.innerHTML = '';
+      list.forEach(firm => {
+        const card = document.createElement('div');
+        card.classList.add('firm-card');
+        const h3 = document.createElement('h3');
+        h3.textContent = firm.name;
+        const p = document.createElement('p');
+        p.textContent = firm.description;
+        card.appendChild(h3);
+        card.appendChild(p);
+        firmListElem.appendChild(card);
+      });
+    }
+    // Zobrazit všechny firmy při načtení stránky
+    displayFirms(firms);
+    // Vyhledávací pole pro filtrování seznamu
+    document.getElementById('firmSearch').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const filtered = firms.filter(firm => firm.name.toLowerCase().includes(term));
+      displayFirms(filtered);
+    });
+
+    // Vložení poznámek pod čarou
+    const footnotesList = document.querySelector('.footnotes ol');
+    footnotes.forEach((note) => {
+      const li = document.createElement('li');
+      li.textContent = note;
+      footnotesList.appendChild(li);
+    });
+  </script>
+</body>
+</html>
