@@ -341,6 +341,15 @@
     .footnotes li {
       margin-bottom: 5px;
     }
+
+    /* Nastavení maximální velikosti plátna grafu,
+       aby interaktivní grafy nebyly příliš velké */
+    #chartCanvas {
+      max-width: 600px;
+      max-height: 400px;
+      margin: 0 auto;
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -423,47 +432,47 @@
       {
         date: '1708–1821',
         title: 'Před 19. stoletím – rané fúze',
-        description: 'Ještě před průmyslovou revolucí docházelo k významným fúzím. V roce 1708 se Východoindická společnost spojila s konkurencí, aby obnovila monopol na indický obchod; v roce 1784 byly sloučeny italské banky Monte dei Paschi a Monte Pio do banky Monti Reuniti; v roce 1821 se Hudson’s Bay Company spojila se svým rivalem North West Company【1178589335265646†L1137-L1143】.'
+        description: 'Ještě před průmyslovou revolucí docházelo k významným fúzím. V roce 1708 se Východoindická společnost spojila s konkurencí, aby obnovila monopol na indický obchod; v roce 1784 byly sloučeny italské banky Monte dei Paschi a Monte Pio do banky Monti Reuniti; v roce 1821 se Hudson’s Bay Company spojila se svým rivalem North West Company.'
       },
       {
         date: '1895–1905',
         title: 'Great Merger Movement',
-        description: 'Na přelomu 19. a 20. století došlo k tzv. Great Merger Movement. Mezi lety 1895–1905 se v USA více než 1 800 firem sloučilo; hodnota těchto transakcí v roce 1900 představovala 20 % amerického HDP【1178589335265646†L1155-L1164】.'
+        description: 'Na přelomu 19. a 20. století došlo k tzv. Great Merger Movement. Mezi lety 1895–1905 se v USA více než 1 800 firem sloučilo; hodnota těchto transakcí v roce 1900 představovala 20 % amerického HDP.'
       },
       {
         date: '1893–1904',
         title: 'První vlna: horizontální fúze',
-        description: 'První vlna (1893–1904) se vyznačovala převážně horizontálními fúzemi, kdy se spojovaly firmy ze stejného odvětví a snažily se získat monopolní postavení【1178589335265646†L1261-L1270】.'
+        description: 'První vlna (1893–1904) se vyznačovala převážně horizontálními fúzemi, kdy se spojovaly firmy ze stejného odvětví a snažily se získat monopolní postavení.'
       },
       {
         date: '1919–1929',
         title: 'Druhá vlna: vertikální fúze',
-        description: 'Druhá vlna M&A (1919–1929) byla charakteristická vertikálními fúzemi – integrací dodavatelského řetězce – a vznikem oligopolů【1178589335265646†L1261-L1270】.'
+        description: 'Druhá vlna M&A (1919–1929) byla charakteristická vertikálními fúzemi – integrací dodavatelského řetězce – a vznikem oligopolů.'
       },
       {
         date: '1955–1970',
         title: 'Třetí vlna: konglomeráty',
-        description: 'Třetí vlna (1955–1970) přinesla konglomerátní fúze, kdy firmy vstupovaly do nesouvisejících odvětví, aby diverzifikovaly riziko【1178589335265646†L1261-L1270】.'
+        description: 'Třetí vlna (1955–1970) přinesla konglomerátní fúze, kdy firmy vstupovaly do nesouvisejících odvětví, aby diverzifikovaly riziko.'
       },
       {
         date: '1974–1989',
         title: 'Čtvrtá vlna: corporate raiding',
-        description: 'Během čtvrté vlny (1974–1989) se objevily nepřátelské převzetí a corporate raiding; spekulanti využívali finančních inovací ke koupi podhodnocených společností【1178589335265646†L1261-L1270】.'
+        description: 'Během čtvrté vlny (1974–1989) se objevily nepřátelské převzetí a corporate raiding; spekulanti využívali finančních inovací ke koupi podhodnocených společností.'
       },
       {
         date: '1993–2008',
         title: 'Pátá vlna: přeshraniční mega-fúze',
-        description: 'Pátá vlna (1993–2008) byla ve znamení přeshraničních mega-fúzí; globalizace a deregulace umožnily firmám expandovat do zahraničí【1178589335265646†L1261-L1270】.'
+        description: 'Pátá vlna (1993–2008) byla ve znamení přeshraničních mega-fúzí; globalizace a deregulace umožnily firmám expandovat do zahraničí.'
       },
       {
         date: '2000s–2010s',
         title: 'Šestá vlna: globalizace a private equity',
-        description: 'Šestá vlna (po roce 2003) byla poháněna globalizací, finančními inovacemi a rostoucí úlohou private equity investorů【1178589335265646†L1261-L1270】.'
+        description: 'Šestá vlna (po roce 2003) byla poháněna globalizací, finančními inovacemi a rostoucí úlohou private equity investorů.'
       },
       {
         date: '2014–současnost',
         title: 'Sedmá vlna: vyvážené transakce',
-        description: 'Sedmá vlna (po roce 2014) se vyznačuje vyváženými transakcemi, které kombinují horizontální, vertikální i konglomerátní prvky【1178589335265646†L1261-L1270】.'
+        description: 'Sedmá vlna (po roce 2014) se vyznačuje vyváženými transakcemi, které kombinují horizontální, vertikální i konglomerátní prvky.'
       }
     ];
 
@@ -471,35 +480,35 @@
     const roles = [
       {
         title: 'Strategické plánování a analýza trhu',
-        content: 'M&A poradci pomáhají vymezit strategii, identifikovat růstové příležitosti a zhodnotit vhodnost fúze nebo akvizice【697512253553183†L123-L156】.'
+        content: 'M&A poradci pomáhají vymezit strategii, identifikovat růstové příležitosti a zhodnotit vhodnost fúze nebo akvizice.'
       },
       {
         title: 'Valuace a finanční analýza',
-        content: 'Provádějí ocenění cílové společnosti, modelují synergii a analyzují finanční ukazatele, aby stanovili férovou hodnotu【697512253553183†L123-L156】.'
+        content: 'Provádějí ocenění cílové společnosti, modelují synergii a analyzují finanční ukazatele, aby stanovili férovou hodnotu.'
       },
       {
         title: 'Strukturování obchodu',
-        content: 'Navrhují optimální strukturu transakce (např. nákup aktiv vs. nákup akcií) a řeší daňové či regulační otázky【697512253553183†L123-L156】.'
+        content: 'Navrhují optimální strukturu transakce (např. nákup aktiv vs. nákup akcií) a řeší daňové či regulační otázky.'
       },
       {
         title: 'Due diligence',
-        content: 'Zajišťují důkladnou prověrku finanční, právní, provozní a technologické situace cíle, aby odhalili rizika【697512253553183†L123-L156】.'
+        content: 'Zajišťují důkladnou prověrku finanční, právní, provozní a technologické situace cíle, aby odhalili rizika.'
       },
       {
         title: 'Vyjednávání',
-        content: 'Působí jako prostředník, zastupují zájmy klienta a vyjednávají podmínky transakce včetně ceny a smluvních klauzulí【697512253553183†L123-L156】.'
+        content: 'Působí jako prostředník, zastupují zájmy klienta a vyjednávají podmínky transakce včetně ceny a smluvních klauzulí.'
       },
       {
         title: 'Financování',
-        content: 'Radí ohledně možností financování transakce; mohou strukturovat dluhové i akciové financování a navrhnout optimální kapitálovou strukturu【697512253553183†L123-L156】.'
+        content: 'Radí ohledně možností financování transakce; mohou strukturovat dluhové i akciové financování a navrhnout optimální kapitálovou strukturu.'
       },
       {
         title: 'Právní soulad',
-        content: 'Zajišťují, aby transakce splňovala všechny právní a regulační požadavky, včetně antimonopolních pravidel a legislativy o cenných papírech【697512253553183†L123-L156】.'
+        content: 'Zajišťují, aby transakce splňovala všechny právní a regulační požadavky, včetně antimonopolních pravidel a legislativy o cenných papírech.'
       },
       {
         title: 'Integrace',
-        content: 'Pomáhají při plánování a realizaci post-merger integrace, aby se dosáhlo očekávané synergie a minimalizovalo narušení provozu【697512253553183†L123-L156】.'
+        content: 'Pomáhají při plánování a realizaci post‑merger integrace, aby se dosáhlo očekávané synergie a minimalizovalo narušení provozu.'
       }
     ];
 
@@ -507,31 +516,31 @@
     const facts = [
       {
         front: 'Technologické poradenství tvoří 30 % M&A transakcí',
-        back: 'IT a technologické poradenství je nejaktivnější segment M&A trhu; marketingové poradenství je druhé a HR poradenství představuje pouze 10 % transakcí【197025618244889†L180-L198】.'
+        back: 'IT a technologické poradenství je nejaktivnější segment M&A trhu; marketingové poradenství je druhé a HR poradenství představuje pouze 10 % transakcí.'
       },
       {
         front: 'Big Four uzavřely 185 transakcí (2010–2014)',
-        back: 'Deloitte, EY, KPMG a PwC uzavřely mezi lety 2010–2014 celkem 185 transakcí – Deloitte 57, PwC 44, KPMG 43 a EY 41【197025618244889†L204-L207】.'
+        back: 'Deloitte, EY, KPMG a PwC uzavřely mezi lety 2010–2014 celkem 185 transakcí – Deloitte 57, PwC 44, KPMG 43 a EY 41.'
       },
       {
         front: 'Regionální rozložení transakcí',
-        back: 'Téměř polovina konzultačních M&A transakcí se odehrává v Severní Americe; Evropa je na druhém místě, přičemž největší podíl evropských transakcí připadá na Spojené království【197025618244889†L218-L231】.'
+        back: 'Téměř polovina konzultačních M&A transakcí se odehrává v Severní Americe; Evropa je na druhém místě, přičemž největší podíl evropských transakcí připadá na Spojené království.'
       },
       {
         front: 'Rostoucí role private equity',
-        back: 'Podíl transakcí financovaných private equity a venture kapitálem nad 20 milionů USD vzrostl v roce 2014 na 15 %, což je téměř dvojnásobek oproti roku 2008【197025618244889†L211-L216】.'
+        back: 'Podíl transakcí financovaných private equity a venture kapitálem nad 20 milionů USD vzrostl v roce 2014 na 15 %, což je téměř dvojnásobek oproti roku 2008.'
       },
       {
         front: 'Přeshraniční transakce',
-        back: 'Do roku 2018 bylo uskutečněno 280 472 přeshraničních fúzí a akvizic v hodnotě 24 069 miliard USD; v roce 1997 se uskutečnilo 2 333 přeshraničních transakcí v souhrnné hodnotě 298 miliard USD【1178589335265646†L1351-L1361】.'
+        back: 'Do roku 2018 bylo uskutečněno 280 472 přeshraničních fúzí a akvizic v hodnotě 24 069 miliard USD; v roce 1997 se uskutečnilo 2 333 přeshraničních transakcí v souhrnné hodnotě 298 miliard USD.'
       },
       {
         front: 'Největší M&A obchod v historii',
-        back: 'Vodafone AirTouch v roce 2000 koupil německý Mannesmann za přibližně 180,95 miliard USD, což je dosud největší M&A transakce【613661016878054†L386-L390】.'
+        back: 'Vodafone AirTouch v roce 2000 koupil německý Mannesmann za přibližně 180,95 miliard USD, což je dosud největší M&A transakce.'
       },
       {
         front: 'Definice synergie',
-        back: 'Hodnota vytvořená spojením dvou společností se nazývá synergie; jde o dodatečnou hodnotu, kterou samostatně společnosti nemohou dosáhnout【613661016878054†L241-L266】.'
+        back: 'Hodnota vytvořená spojením dvou společností se nazývá synergie; jde o dodatečnou hodnotu, kterou samostatně společnosti nemohou dosáhnout.'
       }
     ];
 
@@ -571,24 +580,29 @@
       },
       {
         name: 'L.E.K. Consulting',
-        description: 'L.E.K. je mezinárodní poradenská firma specializující se na strategie, fúze a akvizice a private equity【613661016878054†L355-L370】.'
+        description: 'L.E.K. je mezinárodní poradenská firma specializující se na strategie, fúze a akvizice a private equity.'
+      }
+      ,
+      {
+        name: 'IMAP',
+        description: 'IMAP (International Mergers & Acquisitions Partners) je globální síť nezávislých poradenských firem specializujících se na fúze a akvizice.'
       }
     ];
 
     // Poznámky pod čarou s odkazy na zdroje
     const footnotes = [
-      'Raně historické fúze: East India Company (1708), Monti Reuniti (1784), Hudson’s Bay Company (1821)【1178589335265646†L1137-L1143】.',
-      'Great Merger Movement a horizontální fúze (1895–1905) – více než 1 800 firem se sloučilo, hodnota fúzí dosáhla 20 % amerického HDP【1178589335265646†L1155-L1164】.',
-      'Přehled M&A vln: horizontální (1893–1904), vertikální (1919–1929), konglomerátní (1955–1970), nepřátelská a corporate raiding (1974–1989), přeshraniční (1993–2008), globalizační a private equity (2000s–2010s), vyvážená a horizontální (po 2014)【1178589335265646†L1261-L1270】.',
-      'Synergie – přidaná hodnota vytvořená spojením podniků【613661016878054†L241-L266】.',
-      'Hlavní činnosti M&A poradců: strategické plánování, analýza trhu, valuace, strukturování, prověrka, vyjednávání, financování, právní soulad a integrace【697512253553183†L123-L156】.',
-      'IT poradenství tvoří 30 % transakcí, marketing je druhým nejaktivnějším segmentem, HR je jen 10 %【197025618244889†L180-L198】.',
-      'Velká čtyřka (Deloitte, EY, KPMG a PwC) uzavřela 185 transakcí (2010–2014) – Deloitte 57, PwC 44, KPMG 43 a EY 41【197025618244889†L204-L207】.',
-      'Regionální rozložení: téměř polovina transakcí v Severní Americe; Evropa je druhá, největší podíl přichází z Velké Británie【197025618244889†L218-L231】.',
-      'Podíl private equity a venture kapitálu roste: v roce 2014 15 % transakcí nad 20 milionů USD financováno private equity, dvojnásobek oproti roku 2008【197025618244889†L211-L216】.',
-      'Přeshraniční M&A: 280 472 transakcí v hodnotě 24 069 miliard USD do roku 2018; v roce 1997 2 333 transakcí v hodnotě 298 miliard USD【1178589335265646†L1351-L1361】.',
-      'Největší M&A transakce v historii: Vodafone AirTouch koupil Mannesmann za 180,95 miliard USD【613661016878054†L386-L390】.',
-      'Seznam významných poradenských firem: Kearney, Bain & Company, Boston Consulting Group, McKinsey & Company, L.E.K. Consulting【613661016878054†L355-L370】.'
+      'Raně historické fúze: East India Company (1708), Monti Reuniti (1784), Hudson’s Bay Company (1821).',
+      'Great Merger Movement a horizontální fúze (1895–1905) – více než 1 800 firem se sloučilo, hodnota fúzí dosáhla 20 % amerického HDP.',
+      'Přehled M&A vln: horizontální (1893–1904), vertikální (1919–1929), konglomerátní (1955–1970), nepřátelská a corporate raiding (1974–1989), přeshraniční (1993–2008), globalizační a private equity (2000s–2010s), vyvážená a horizontální (po 2014).',
+      'Synergie – přidaná hodnota vytvořená spojením podniků.',
+      'Hlavní činnosti M&A poradců: strategické plánování, analýza trhu, valuace, strukturování, prověrka, vyjednávání, financování, právní soulad a integrace.',
+      'IT poradenství tvoří 30 % transakcí, marketing je druhým nejaktivnějším segmentem, HR je jen 10 %.',
+      'Velká čtyřka (Deloitte, EY, KPMG a PwC) uzavřela 185 transakcí (2010–2014) – Deloitte 57, PwC 44, KPMG 43 a EY 41.',
+      'Regionální rozložení: téměř polovina transakcí v Severní Americe; Evropa je druhá, největší podíl přichází z Velké Británie.',
+      'Podíl private equity a venture kapitálu roste: v roce 2014 15 % transakcí nad 20 milionů USD financováno private equity, dvojnásobek oproti roku 2008.',
+      'Přeshraniční M&A: 280 472 transakcí v hodnotě 24 069 miliard USD do roku 2018; v roce 1997 2 333 transakcí v hodnotě 298 miliard USD.',
+      'Největší M&A transakce v historii: Vodafone AirTouch koupil Mannesmann za 180,95 miliard USD.',
+      'Seznam významných poradenských firem: Kearney, Bain & Company, Boston Consulting Group, McKinsey & Company, L.E.K. Consulting.'
     ];
 
     // Inicializace a naplnění časové osy
